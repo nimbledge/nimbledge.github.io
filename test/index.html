@@ -1,577 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>CoolUBG Wrapped</title>
-  <style>
-    body {
-      font-family: "Segoe UI", Roboto, sans-serif;
-      background-color: #121212;
-      color: #f0f0f0;
-      line-height: 1.6;
-      margin: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow-x: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steam Wrapped</title>
+<style>
+body { margin:0; font-family:'Montserrat', sans-serif; background:#121212; color:#fff; scroll-behavior:smooth; }
+h1,h2,p { margin:0; text-align:center; }
+h1 { font-weight:900; font-size:6vw; line-height:1.2; margin-bottom:10px; }
+h2 { font-weight:700; font-size:3vw; color:#eee; line-height:1.2; margin-bottom:10px; }
+p { font-size:1.8vw; color:#ddd; margin-bottom:20px; }
 
-    h1 {
-      font-size: 2.5rem;
-      color: #ffffff;
-      margin-bottom: 1.5rem;
-    }
+section { display:flex; flex-direction:column; justify-content:center; align-items:center; padding:60px 20px; box-sizing:border-box; overflow:hidden; min-height:100vh; }
 
-    #yearInput {
-      padding: 0.5rem;
-      font-size: 1.2rem;
-      border-radius: 4px;
-      border: 1px solid #666;
-      background-color: #1e1e1e;
-      color: #f0f0f0;
-      width: 250px;
-      margin-bottom: 2rem;
-    }
+/* Gradients */
+.gradient-1 { background: linear-gradient(135deg, #0f2027,#203a43,#2c5364); }
+.gradient-2 { background: linear-gradient(135deg,#1db954,#1ed760); }
+.gradient-3 { background: linear-gradient(135deg,#9146ff,#bc67ff); }
+.gradient-4 { background: linear-gradient(135deg,#1fadff,#ff9068); }
+.gradient-5 { background: linear-gradient(135deg,#00c6ff,#0072ff); }
+.gradient-6 { background: linear-gradient(135deg,#ff0084,#33001b); }
 
-    .stats-container {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      width: 90%;
-      max-width: 1300px;
-      margin-bottom: 2rem;
-    }
+.year { font-size:8vw; }
 
-    .stat-box {
-      flex: 1;
-      background-color: #1e1e1e;
-      padding: 2.5rem;
-      border-radius: 8px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
+/* Top Games */
+.top-games-wrapper { display:flex; flex-wrap:wrap; gap:40px; max-width:1100px; margin-top:50px; align-items:stretch; justify-content:center; }
+.top-games-list { flex:1; display:flex; flex-direction:column; justify-content:flex-start; gap:15px; min-width:300px; }
+.game-card { display:grid; grid-template-columns:50px 1fr; gap:12px; background: rgba(0,0,0,0.28); padding:18px; border-radius:4px; backdrop-filter: blur(8px); align-items:center; }
+.rank { font-size:3vw; font-weight:900; text-align:center; }
+.game-info strong { font-size:2.5vw; font-weight:800; }
+.game-info span { font-size:2vw; opacity:1; }
+.featured-game { width:320px; background: rgba(0,0,0,0.35); padding:22px; border-radius:4px; backdrop-filter: blur(6px); text-align:center; box-shadow: 0 6px 18px rgba(0,0,0,0.25); display:flex; flex-direction:column; gap:15px; }
+.featured-game img { width:100%; border-radius:4px; }
 
-    .stat-number {
-      font-size: 3.5rem;
-      font-weight: bold;
-      color: #90caf9;
-    }
+/* Monthly Graph */
+.month-column-wrapper { display:flex; justify-content:space-between; align-items:flex-end; gap:10px; width:90%; max-width:1400px; height:60vh; margin-top:15px; overflow:visible; }
+.month-column { display:flex; flex-direction:column; justify-content:flex-end; align-items:center; width:60px; height:100%; position:relative; }
+.bar-stack { display:flex; flex-direction:column; justify-content:flex-end; width:100%; height:100%; }
+.game-bar { width:100%; position:relative; border-radius:4px; margin:0; cursor:pointer; transition: transform 0.2s; min-height:4px; background-size:cover; background-position:center; }
+.game-bar:hover { transform: scaleY(1.05); z-index:2; }
+.tooltip { position:absolute; z-index:99999; bottom:110%; left:50%; transform:translateX(-50%); padding:4px 6px; background:rgba(0,0,0,0.85); color:white; font-size:12px; white-space:nowrap; opacity:0; pointer-events:none; border-radius:4px; transition:0.15s; }
+.game-bar:hover .tooltip { opacity:1; }
+.month-label { margin-top:6px; font-size:1.2vw; color:#fff; text-align:center; }
 
-    .stat-label {
-      margin-top: 0.5rem;
-      font-size: 1.3rem;
-      color: #b0bec5;
-      font-weight: 600;
-    }
-
-    .game-boxes {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      width: 90%;
-      max-width: 1300px;
-      margin-bottom: 2rem;
-    }
-
-    .game-box {
-      flex: 1;
-      position: relative;
-      aspect-ratio: 4 / 3;
-      border-radius: 8px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      background-color: #1e1e1e;
-      color: #90caf9;
-      background-image: none;
-      padding: 1rem;
-    }
-
-    .game-box::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: var(--bg-image, none);
-      background-size: auto 100%;
-      background-position: center center;
-      background-repeat: no-repeat;
-      filter: blur(6px) brightness(0.5);
-      z-index: 0;
-      transition: background-image 0.3s ease;
-      border-radius: 8px;
-    }
-
-    .game-box-inner {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      height: 100%;
-      padding-bottom: 2.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      overflow: visible;
-    }
-
-    .game-box-content {
-      font-weight: 900;
-      white-space: nowrap;
-      overflow: visible;
-      user-select: none;
-      max-width: 90%;
-      margin: 0 auto;
-      font-size: 36px;
-    }
-
-    /* Hours played text at bottom */
-    .game-box-subtext {
-      position: absolute;
-      bottom: 0.8rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 1rem;
-      color: #b0bec5;
-      font-weight: 600;
-      user-select: none;
-      white-space: nowrap;
-      z-index: 1;
-      width: 100%;
-      max-width: 100%;
-      text-align: center;
-    }
-
-    .blank-box .game-box-content {
-      font-size: 3rem;
-      color: #555;
-      user-select: none;
-    }
-
-    /* Responsive */
-    @media (max-width: 700px) {
-      .stats-container,
-      .game-boxes {
-        flex-direction: column;
-        width: 100%;
-      }
-
-      .stat-box,
-      .game-box {
-        width: 100%;
-        margin-bottom: 1rem;
-      }
-    }
-  </style>
+/* Responsive */
+@media(max-width:900px){
+  h1 { font-size:10vw; }
+  h2 { font-size:5vw; }
+  p { font-size:3vw; }
+  .rank { font-size:5vw; }
+  .game-info strong { font-size:4vw; }
+  .game-info span { font-size:3.5vw; }
+  .month-label { font-size:3vw; }
+  .tooltip { font-size:3vw; }
+}
+</style>
 </head>
 <body>
-        <script src="/pages.js"></script>
 
-  <h1>CoolUBG Wrapped</h1>
-  <input
-    type="number"
-    id="yearInput"
-    placeholder="Enter year here"
-    min="2000"
-    max="2100"
-  />
+<section class="gradient-1">
+  <h1 class="year"></h1>
+  <h2>Your Gaming Year</h2>
+  <p>Scroll down to see your Steam-style year in games</p>
+</section>
 
-  <div class="stats-container" id="stats">
-    <div class="stat-box">
-      <div class="stat-number" id="uniqueGames">—</div>
-      <div class="stat-label">Games Played</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-number" id="totalHours">—</div>
-      <div class="stat-label">Hours Played</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-number" id="totalDays">—</div>
-      <div class="stat-label" id="daysLabel">Days Played</div>
+<section class="gradient-2">
+  <h1>0</h1>
+  <h2>Hours Played</h2>
+  <p>0</p>
+</section>
+
+<section class="gradient-3">
+  <h1>Top Tags</h1>
+  <h2>Action • Adventure • Indie • RPG</h2>
+  <p>The genres that dominated your year</p>
+</section>
+
+<section class="gradient-4">
+  <h1>Top Games Each Month</h1>
+  <div class="month-column-wrapper" id="month-graph"></div>
+</section>
+
+<section class="gradient-5">
+  <h1>Most Played Game</h1>
+  <div class="featured-game">
+    <img src="">
+    <h2>Game</h2>
+    <p>0 hrs</p>
+  </div>
+</section>
+
+<section class="gradient-6">
+  <h1>Your Top Games</h1>
+  <div class="top-games-wrapper">
+    <div class="top-games-list"></div>
+    <div class="featured-game">
+      <img src="">
+      <h2>Game</h2>
+      <p>0 hrs</p>
     </div>
   </div>
+</section>
 
-  <!-- Daily playtime chart -->
-  <canvas
-    id="dailyChart"
-    width="1300"
-    height="200"
-    style="background:#1e1e1e; border-radius:8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); margin-bottom: 2rem;"
-  ></canvas>
+<script>
+const PDB_NAME = "PlaytimeDB";
+const PSTORE_NAME = "playtimeLogs";
 
-  <div class="game-boxes" id="topGamesRow">
-    <div class="game-box blank-box"><div class="game-box-content">_</div></div>
-    <div class="game-box blank-box"><div class="game-box-content">_</div></div>
-    <div class="game-box blank-box"><div class="game-box-content">_</div></div>
-  </div>
-
-  <script>
-    // Database constants
-    const DB_NAME = "PlaytimeDB";
-    const DB_VERSION = 1;
-    const STORE_NAME = "playtimeLogs";
-
-    // Placeholder pagesData (replace with your real pages.js data or include pages.js separately)
-    // Example structure:
-    // const pagesData = [
-    //   { name: "gameId1", formatted_Name: "Game One" },
-    //   { name: "gameId2", formatted_Name: "Game Two" },
-    // ];
-
-    // Open IndexedDB
-    function openDB() {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
-        request.onsuccess = (event) => resolve(event.target.result);
-        request.onerror = () => reject("Failed to open DB");
-      });
-    }
-
-    // Parse timestamp string format "dd/mm/yyyy, hh:mm"
-    function parseTimestamp(str) {
-      const [datePart, timePart] = str.split(", ");
-      const [day, month, year] = datePart.split("/").map(Number);
-      const [hour, minute] = timePart.split(":").map(Number);
-      return new Date(year, month - 1, day, hour, minute);
-    }
-
-    // Pluralize helper
-    function pluralize(count, singular, plural) {
-      return count === 1 ? singular : plural;
-    }
-
-    // Get formatted game name by gameId
-    function getFormattedName(gameId) {
-      const page = pagesData.find((p) => p.name === gameId);
-      return page ? page.formatted_Name : gameId;
-
-    }
-
-    // Adjust font size to fit container width for game-box-content
-    function fitGameIdText(container) {
-      const content = container.querySelector(".game-box-content");
-      if (!content) return;
-
-      const formattedName = content.textContent.trim();
-      let fontSize = 36;
-      const minFontSize = 12;
-      const maxWidth = container.clientWidth * 0.9;
-
-      content.style.fontSize = fontSize + "px";
-
-      while (content.scrollWidth > maxWidth && fontSize > minFontSize) {
-        fontSize -= 1;
-        content.style.fontSize = fontSize + "px";
+function PopenB() {
+  return new Promise((resolve,reject)=>{
+    let req = indexedDB.open(PDB_NAME,1);
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror = e => reject(e.target.error);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if(!db.objectStoreNames.contains(PSTORE_NAME)){
+        db.createObjectStore(PSTORE_NAME, {keyPath:"gameId"});
       }
-    }
-
-    // Draw daily playtime bar chart
-    function drawDailyPlaytimeChart(logs, year) {
-  const canvas = document.getElementById("dailyChart");
-  if (!canvas.getContext) return;
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Adjust canvas height to be taller (e.g., 250px)
-  canvas.height = 250;
-
-  // Determine date range for the year, up to today if current year
-  const startDate = new Date(year, 0, 1);
-  const today = new Date();
-  let endDate = new Date(year, 11, 31);
-  if (year === today.getFullYear()) {
-    endDate = new Date(year, today.getMonth(), today.getDate());
-  }
-
-  // Build array of all dates in range
-  const dates = [];
-  for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-    dates.push(new Date(d));
-  }
-
-  // Assign consistent colors to each gameId
-  const allGameIds = Array.from(new Set(logs.map(l => l.gameId)));
-  const colors = [
-    "#90caf9", "#f48fb1", "#81c784", "#ffb74d", "#4db6ac",
-    "#9575cd", "#e57373", "#4fc3f7", "#aed581", "#f06292",
-    "#ba68c8", "#64b5f6"
-  ];
-  const gameIdColorMap = {};
-  allGameIds.forEach((id, i) => {
-    gameIdColorMap[id] = colors[i % colors.length];
+    };
   });
-
-  // Build a daily map of gameId -> minutes played
-  // Initialize: dateStr -> { gameId: minutes, ... }
-  const dailyGameMinutesMap = {};
-  dates.forEach(date => {
-    const key = date.toISOString().slice(0, 10);
-    dailyGameMinutesMap[key] = {};
-  });
-
-  // Count minutes per game per day
-  logs.forEach(entry => {
-    entry.logs.forEach(logStr => {
-      const date = parseTimestamp(logStr);
-      if (date.getFullYear() === year) {
-        const dayKey = date.toISOString().slice(0, 10);
-        if (!dailyGameMinutesMap[dayKey]) dailyGameMinutesMap[dayKey] = {};
-        dailyGameMinutesMap[dayKey][entry.gameId] = (dailyGameMinutesMap[dayKey][entry.gameId] || 0) + 1;
-      }
-    });
-  });
-
-  // Prepare an array of daily totals for scaling
-  const dailyTotals = dates.map(date => {
-    const key = date.toISOString().slice(0, 10);
-    const gameMins = dailyGameMinutesMap[key] || {};
-    return Object.values(gameMins).reduce((a, b) => a + b, 0);
-  });
-
-  // Dimensions and padding
-  const paddingLeft = 50;
-  const paddingRight = 20;
-  const paddingTop = 30;
-  const paddingBottom = 50;
-
-  const chartWidth = canvas.width - paddingLeft - paddingRight;
-  const chartHeight = canvas.height - paddingTop - paddingBottom;
-
-  // Find max minutes in a day (minimum 10 for visible bars)
-  const maxMinutes = Math.max(10, Math.max(...dailyTotals));
-
-  // Draw axes
-  ctx.strokeStyle = "#90caf9";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(paddingLeft, paddingTop);
-  ctx.lineTo(paddingLeft, paddingTop + chartHeight);
-  ctx.lineTo(paddingLeft + chartWidth, paddingTop + chartHeight);
-  ctx.stroke();
-
-  // Draw y-axis labels (0, mid, max)
-  ctx.fillStyle = "#b0bec5";
-  ctx.font = "12px Segoe UI, Roboto, sans-serif";
-  ctx.textAlign = "right";
-  ctx.fillText("0", paddingLeft - 5, paddingTop + chartHeight);
-  ctx.fillText(Math.round(maxMinutes / 2), paddingLeft - 5, paddingTop + chartHeight / 2 + 4);
-  ctx.fillText(maxMinutes, paddingLeft - 5, paddingTop + 14);
-
-  // Draw bars stacked per day
-  const barWidth = chartWidth / dates.length;
-  dates.forEach((date, i) => {
-    const key = date.toISOString().slice(0, 10);
-    const gameMins = dailyGameMinutesMap[key] || {};
-    let yBase = paddingTop + chartHeight;
-    // Sort gameIds by color for consistency (or by minutes descending)
-    const sortedGames = Object.entries(gameMins).sort((a, b) => b[1] - a[1]);
-
-    sortedGames.forEach(([gameId, mins]) => {
-      const barHeight = (mins / maxMinutes) * chartHeight;
-      const x = paddingLeft + i * barWidth;
-      const y = yBase - barHeight;
-      ctx.fillStyle = gameIdColorMap[gameId] || "#777";
-      ctx.fillRect(x, y, barWidth, barHeight);
-      yBase = y; // stack upwards
-    });
-  });
-
-  // Draw month labels - only one per month, positioned at first day of month
-  ctx.fillStyle = "#b0bec5";
-  ctx.textAlign = "center";
-  ctx.font = "12px Segoe UI, Roboto, sans-serif";
-
-  // Collect months so no repeats
-  const monthsDrawn = new Set();
-  dates.forEach((date, i) => {
-    const monthNum = date.getMonth();
-    const day = date.getDate();
-    if (!monthsDrawn.has(monthNum) && day === 1) {
-      monthsDrawn.add(monthNum);
-      const monthName = date.toLocaleString("default", { month: "short" });
-      const x = paddingLeft + i * barWidth + barWidth / 2;
-      const y = paddingTop + chartHeight + 25;
-      ctx.fillText(monthName, x, y);
-    }
-  });
-
-  // Tooltip handling
-  // Create or reuse a tooltip div
-  let tooltip = document.getElementById("chartTooltip");
-  if (!tooltip) {
-    tooltip = document.createElement("div");
-    tooltip.id = "chartTooltip";
-    tooltip.style.position = "absolute";
-    tooltip.style.pointerEvents = "none";
-    tooltip.style.background = "#222";
-    tooltip.style.color = "#fff";
-    tooltip.style.padding = "8px";
-    tooltip.style.borderRadius = "6px";
-    tooltip.style.fontSize = "12px";
-    tooltip.style.boxShadow = "0 0 8px rgba(0,0,0,0.6)";
-    tooltip.style.display = "none";
-    tooltip.style.zIndex = "1000";
-    document.body.appendChild(tooltip);
-  }
-
-  // Handle mouse move for tooltip
-  canvas.onmousemove = (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    // Calculate which day index is hovered
-    let dayIndex = Math.floor((mouseX - paddingLeft) / barWidth);
-    if (dayIndex < 0 || dayIndex >= dates.length) {
-      tooltip.style.display = "none";
-      return;
-    }
-
-    const date = dates[dayIndex];
-    const key = date.toISOString().slice(0, 10);
-    const gameMins = dailyGameMinutesMap[key] || {};
-
-    if (Object.keys(gameMins).length === 0) {
-      tooltip.style.display = "none";
-      return;
-    }
-
-    // Build tooltip HTML content
-    let html = `<strong>${date.toDateString()}</strong><br/>`;
-    Object.entries(gameMins).forEach(([gameId, mins]) => {
-      const color = gameIdColorMap[gameId];
-      html += `<span style="color:${color}; font-weight:bold;">${getFormattedName(gameId)}</span>: ${mins} ${pluralize(mins, "minute", "minutes")}<br/>`;
-    });
-
-    tooltip.innerHTML = html;
-    tooltip.style.display = "block";
-
-    // Position tooltip near mouse but inside viewport
-    const tooltipRect = tooltip.getBoundingClientRect();
-    let top = e.clientY + 15;
-    let left = e.clientX + 15;
-    if (left + tooltipRect.width > window.innerWidth) {
-      left = e.clientX - tooltipRect.width - 15;
-    }
-    if (top + tooltipRect.height > window.innerHeight) {
-      top = e.clientY - tooltipRect.height - 15;
-    }
-    tooltip.style.left = left + "px";
-    tooltip.style.top = top + "px";
-  };
-
-  canvas.onmouseleave = () => {
-    tooltip.style.display = "none";
-  };
 }
 
+function formatTime(mins){ return mins<120 ? mins+" min" : Math.round(mins/60*10)/10+" hrs"; }
+function formatHours(mins){ return (mins/60).toFixed(1); }
 
-    // Update all stats and UI for given year
-    async function updateStatsForYear(year) {
-      try {
-        const db = await openDB();
-        const tx = db.transaction(STORE_NAME, "readonly");
-        const store = tx.objectStore(STORE_NAME);
-        const request = store.getAll();
+document.addEventListener("DOMContentLoaded",async()=>{
+  const db = await PopenB();
+  const tx = db.transaction(PSTORE_NAME,"readonly");
+  const store = tx.objectStore(PSTORE_NAME);
 
-        request.onsuccess = (event) => {
-          const logs = event.target.result;
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const allGames = await new Promise(resolve=>{
+    const res = [];
+    store.openCursor().onsuccess=e=>{
+      const cursor=e.target.result;
+      if(cursor){ res.push(cursor.value); cursor.continue(); }
+      else resolve(res);
+    };
+  });
 
-          const uniqueGameIds = new Set();
-          let totalPlayMinutes = 0;
-          const dayTracker = new Set();
-          const gameLogCounts = {};
+  const totalPlaytime={}; 
+  const monthlyGamesColumn={}; 
+  monthNames.forEach(m=>monthlyGamesColumn[m]=[]);
 
-          logs.forEach((entry) => {
-            const timestamps = entry.logs.map(parseTimestamp);
-            const filtered = timestamps.filter((date) => date.getFullYear() === year);
+  allGames.forEach(entry=>{
+    const game = entry.gameId;
+    const logs = entry.logs;
+    totalPlaytime[game] = logs.length; // each log = 1 minute
 
-            if (filtered.length > 0) {
-              uniqueGameIds.add(entry.gameId);
-              totalPlayMinutes += filtered.length;
-
-              filtered.forEach((date) => {
-                const dateStr = date.toISOString().split("T")[0];
-                dayTracker.add(dateStr);
-              });
-
-              if (!gameLogCounts[entry.gameId]) gameLogCounts[entry.gameId] = 0;
-              gameLogCounts[entry.gameId] += filtered.length;
-            }
-          });
-
-          // Update main stats
-          document.getElementById("uniqueGames").textContent = uniqueGameIds.size || "—";
-          document.getElementById("totalHours").textContent = totalPlayMinutes ? (totalPlayMinutes / 60).toFixed(1) : "—";
-          const daysPlayed = dayTracker.size;
-          document.getElementById("totalDays").textContent = daysPlayed || "—";
-          document.getElementById("daysLabel").textContent = pluralize(daysPlayed, "Day Played", "Days Played");
-
-          // Prepare top 3 games sorted by logs count
-          const topGamesRow = document.getElementById("topGamesRow");
-          topGamesRow.innerHTML = "";
-
-          const sortedGames = Object.entries(gameLogCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
-
-          for (let i = 0; i < 3; i++) {
-            const box = document.createElement("div");
-            box.className = "game-box";
-
-            if (sortedGames[i]) {
-              const [gameId, count] = sortedGames[i];
-              const hours = (count / 60).toFixed(1);
-              const formattedName = getFormattedName(gameId);
-
-              box.style.setProperty("--bg-image", `url(/images/games-512/${gameId}.png)`);
-
-              box.innerHTML = `
-                <div class="game-box-inner">
-                  <div class="game-box-content" title="${formattedName}">
-                    ${formattedName}
-                    <div class="game-box-subtext">${hours} ${pluralize(hours == 1 ? 1 : 2, "hour", "hours")} played</div>
-                  </div>
-                </div>
-              `;
-            } else {
-              box.classList.add("blank-box");
-              box.style.setProperty("--bg-image", "none");
-              box.innerHTML = `<div class="game-box-content">_</div>`;
-            }
-
-            topGamesRow.appendChild(box);
-          }
-
-          // Adjust font size for all game boxes
-          const boxes = topGamesRow.querySelectorAll(".game-box");
-          boxes.forEach(fitGameIdText);
-
-          // Draw chart
-          drawDailyPlaytimeChart(logs, year);
-        };
-
-        request.onerror = (e) => {
-          console.error("Could not read IndexedDB:", e);
-        };
-      } catch (err) {
-        console.error("Error opening DB:", err);
-      }
-    }
-
-    // On year input change
-    document.getElementById("yearInput").addEventListener("change", (e) => {
-      const year = parseInt(e.target.value, 10);
-      if (!isNaN(year)) {
-        updateStatsForYear(year);
-      }
+    const monthCount={}; monthNames.forEach(m=>monthCount[m]=0);
+    logs.forEach(l=>{
+      const [d]=l.split(','); 
+      const [day,month]=d.split('/').map(Number);
+      monthCount[monthNames[month-1]]++;
     });
 
-    // On page load, clear input
-    window.onload = () => {
-      document.getElementById("yearInput").value = "";
-    };
-  </script>
+    monthNames.forEach(m=>{
+      if(monthCount[m]>0){
+        monthlyGamesColumn[m].push({
+          game,
+          mins: monthCount[m]
+        });
+      }
+    });
+  });
+
+  const totalMinutes = Object.values(totalPlaytime).reduce((a,b)=>a+b,0);
+  document.querySelector('.year').textContent = new Date().getFullYear()+' Wrapped';
+  const hoursSection = document.querySelector('.gradient-2');
+  hoursSection.querySelector('h1').textContent = formatHours(totalMinutes);
+  hoursSection.querySelector('p').textContent = formatTime(totalMinutes);
+
+  const topGames = Object.keys(totalPlaytime).sort((a,b)=>totalPlaytime[b]-totalPlaytime[a]).slice(0,5);
+  const mostPlayed = topGames[0]||"No Data";
+
+  const listWrapper = document.querySelector('.top-games-list'); listWrapper.innerHTML='';
+  topGames.forEach((game,i)=>{
+    const card = document.createElement('div'); card.className='game-card';
+    card.innerHTML=`<div class="rank">${i+1}</div>
+      <div class="game-info"><strong>${game}</strong><br><span>${formatTime(totalPlaytime[game])}</span></div>`;
+    listWrapper.appendChild(card);
+  });
+
+  const featured = document.querySelectorAll('.featured-game');
+  featured.forEach(f=>{
+    f.querySelector('h2').textContent = mostPlayed;
+    f.querySelector('p').textContent = formatTime(totalPlaytime[mostPlayed]||0);
+    f.querySelector('img').src = `images/games-512/${mostPlayed}.png`;
+  });
+
+  // Monthly graph
+  const wrapper = document.getElementById('month-graph'); wrapper.innerHTML='';
+  const maxTotal = Math.max(...monthNames.map(m=>monthlyGamesColumn[m].reduce((a,b)=>a+b.mins,0)),1);
+
+  monthNames.forEach(month=>{
+    const col = document.createElement('div'); col.className='month-column';
+    const stack = document.createElement('div'); stack.className='bar-stack';
+
+    monthlyGamesColumn[month].sort((a,b)=>b.mins-a.mins).forEach(item=>{
+      const bar = document.createElement('div'); bar.className='game-bar';
+      bar.style.height = (item.mins/maxTotal*100)+'%';
+      bar.style.backgroundImage = `url(images/games-512/${item.game}.png)`;
+      bar.style.backgroundSize = 'cover';
+      bar.style.backgroundPosition = 'center';
+      bar.style.backgroundRepeat = 'no-repeat';
+
+      const tip = document.createElement('div'); tip.className='tooltip';
+      tip.textContent = `${item.game}: ${formatTime(item.mins)}`;
+      bar.appendChild(tip);
+      stack.appendChild(bar);
+    });
+
+    col.appendChild(stack);
+    const label = document.createElement('div'); label.className='month-label'; label.textContent=month;
+    col.appendChild(label);
+    wrapper.appendChild(col);
+  });
+});
+</script>
 </body>
 </html>

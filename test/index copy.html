@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steam Wrapped</title>
+<style>
+body {
+  margin:0;
+  font-family:'Montserrat', sans-serif;
+  background:#121212;
+  color:#fff;
+  scroll-behavior:smooth;
+}
+h1,h2,p { margin:0; text-align:center; }
+
+h1 { font-weight:900; font-size:6vw; line-height:1.2; margin-bottom:10px; }
+h2 { font-weight:700; font-size:3vw; color:#eee; line-height:1.2; margin-bottom:10px; }
+p { font-size:1.8vw; color:#ddd; margin-bottom:20px; }
+
+section {
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:60px 20px;
+  box-sizing:border-box;
+}
+
+.gradient-1 { background: linear-gradient(135deg, #0f2027,#203a43,#2c5364); }
+.gradient-2 { background: linear-gradient(135deg,#1db954,#1ed760); }
+.gradient-3 { background: linear-gradient(135deg,#9146ff,#bc67ff); }
+.gradient-4 { background: linear-gradient(135deg,#ff4b1f,#ff9068); }
+.gradient-5 { background: linear-gradient(135deg,#00c6ff,#0072ff); }
+.gradient-6 { background: linear-gradient(135deg,#ff0084,#33001b); }
+
+.year { font-size:8vw; }
+
+.top-games-wrapper {
+  display:flex;
+  flex-wrap:wrap;
+  gap:40px;
+  max-width:1100px;
+  margin-top:50px;
+  align-items:stretch;
+  justify-content:center;
+}
+.top-games-list { flex:1; display:flex; flex-direction:column; justify-content:space-between; min-width:300px; gap:15px; }
+.game-card {
+  display:grid;
+  grid-template-columns:50px 1fr;
+  gap:12px;
+  background: rgba(0,0,0,0.28);
+  padding:18px;
+  border-radius:4px;
+  backdrop-filter: blur(8px);
+  align-items:center;
+}
+.rank { font-size:3vw; font-weight:900; text-align:center; }
+.game-info strong { font-size:2.5vw; font-weight:800; }
+.game-info span { font-size:2vw; opacity:1; }
+
+.featured-game {
+  width:320px;
+  background: rgba(0,0,0,0.35);
+  padding:22px;
+  border-radius:4px;
+  backdrop-filter: blur(6px);
+  text-align:center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+.featured-game img { width:100%; border-radius:4px; }
+
+.month-column-wrapper {
+  display:flex;
+  justify-content:space-around;
+  align-items:flex-end;
+  gap:15px;
+  width:90%;
+  max-width:1200px;
+  height:70vh; /* limit graph height */
+  overflow:hidden;
+  margin-top:30px;
+}
+.month-column { display:flex; flex-direction:column; align-items:center; flex:1; max-width:80px; }
+.bar-container { display:flex; flex-direction:column-reverse; width:100%; align-items:center; gap:3px; }
+
+.game-bar {
+  position:relative;
+  width:50px;
+  display:flex;
+  justify-content:center;
+  cursor:pointer;
+  background:#333;
+  border-radius:3px;
+}
+.game-bar img { width:100%; border-radius:3px; }
+
+.tooltip {
+  position:absolute;
+  bottom:105%;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,0.85);
+  padding:5px 8px;
+  border-radius:4px;
+  font-size:1.5vw;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+  transition:0.2s ease;
+  z-index:2;
+}
+.game-bar:hover .tooltip { opacity:1; }
+
+.month-label { margin-top:10px; font-size:1.8vw; text-align:center; color:#eee; }
+
+@media(max-width:900px){
+  h1 { font-size:10vw; }
+  h2 { font-size:5vw; }
+  p { font-size:3vw; }
+  .rank { font-size:5vw; }
+  .game-info strong { font-size:4vw; }
+  .game-info span { font-size:3.5vw; }
+  .month-label { font-size:3vw; }
+  .tooltip { font-size:3vw; }
+}
+</style>
+</head>
+<body>
+
+<section class="gradient-1">
+  <h1 class="year"></h1>
+  <h2>Your Gaming Year</h2>
+  <p>Scroll down to see your Steam-style year in games</p>
+</section>
+
+<section class="gradient-2">
+  <h1>0</h1>
+  <h2>Hours Played</h2>
+  <p>0</p>
+</section>
+
+<section class="gradient-3">
+  <h1>Top Tags</h1>
+  <h2>Action • Adventure • Indie • RPG</h2>
+  <p>The genres that dominated your year</p>
+</section>
+
+<section class="gradient-4">
+  <h1>Top Games Each Month</h1>
+  <div class="month-column-wrapper" id="month-graph"></div>
+</section>
+
+<section class="gradient-5">
+  <h1>Most Played Game</h1>
+  <div class="featured-game">
+    <img src="">
+    <h2>Game</h2>
+    <p>0 hrs</p>
+  </div>
+</section>
+
+<section class="gradient-6">
+  <h1>Your Top Games</h1>
+  <div class="top-games-wrapper">
+    <div class="top-games-list"></div>
+    <div class="featured-game">
+      <img src="">
+      <h2>Game</h2>
+      <p>0 hrs</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// === IndexedDB Setup ===
+const PDB_NAME = "PlaytimeDB";
+const PSTORE_NAME = "playtimeLogs";
+const PDB_VERSION = 1;
+
+function PopenB() {
+  return new Promise((resolve,reject)=>{
+    let request = indexedDB.open(PDB_NAME,PDB_VERSION);
+    request.onupgradeneeded = e=>{
+      let db = e.target.result;
+      if(!db.objectStoreNames.contains(PSTORE_NAME)){
+        db.createObjectStore(PSTORE_NAME,{keyPath:"gameId"});
+      }
+    };
+    request.onsuccess = e=>resolve(e.target.result);
+    request.onerror = e=>reject(e.target.error);
+  });
+}
+
+async function getPlaytimeLogs(gameId){
+  const db = await PopenB();
+  return new Promise((resolve,reject)=>{
+    let tx = db.transaction(PSTORE_NAME,"readonly");
+    let store = tx.objectStore(PSTORE_NAME);
+    let req = store.get(gameId);
+    req.onsuccess=e=>resolve(req.result? req.result.logs: []);
+    req.onerror=e=>reject(e);
+  });
+}
+
+async function calculatePlaytime(gameId){
+  const logs = await getPlaytimeLogs(gameId);
+  if(logs.length===0) return "Never Played";
+  if(logs.length===1) return "1 minute";
+  if(logs.length>120) return ((logs.length/60).toFixed(1).replace(".0",""))+" hours";
+  return logs.length+" minutes";
+}
+
+// === Sample Games List ===
+const sampleGames = ["A Dark Room","CyberQuest","Neon Nights","PixelRunner","Retro Racer","Lost Realms"];
+
+// === Populate Data ===
+document.addEventListener("DOMContentLoaded", async ()=>{
+  const totalPlaytime = {};
+  const monthlyGamesColumn = {};
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  monthNames.forEach(m=>monthlyGamesColumn[m]=[]);
+
+  // Gather playtime from IndexedDB
+  for(const game of sampleGames){
+    const logs = await getPlaytimeLogs(game);
+    totalPlaytime[game] = logs.length;
+    const monthlyCount = {};
+    monthNames.forEach(m=>monthlyCount[m]=0);
+    logs.forEach(log=>{
+      const [dateStr] = log.split(', ');
+      const [day,month] = dateStr.split('/').map(Number);
+      monthlyCount[monthNames[month-1]]++;
+    });
+    monthNames.forEach(m=>{
+      if(monthlyCount[m]>0){
+        monthlyGamesColumn[m].push({game,mins:monthlyCount[m],img:'https://via.placeholder.com/50x50.png?text='+game.split(' ').map(w=>w[0].toUpperCase()).join('')});
+      }
+    });
+  }
+
+  // Top games
+  const topGames = Object.keys(totalPlaytime).sort((a,b)=>totalPlaytime[b]-totalPlaytime[a]).slice(0,5);
+  const mostPlayed = topGames[0];
+  const totalMinutes = Object.values(totalPlaytime).reduce((a,b)=>a+b,0);
+
+  // Section 1: Year
+  const year = new Date().getFullYear();
+  document.querySelector(".year").textContent = year+" Wrapped";
+
+  // Section 2: Hours played
+  const hoursSection = document.querySelector(".gradient-2");
+  const hoursPlayed = (totalMinutes/60).toFixed(1);
+  hoursSection.querySelector("h1").textContent = hoursPlayed;
+  hoursSection.querySelector("h2").textContent = "Hours Played";
+  hoursSection.querySelector("p").textContent = totalMinutes<120? `${totalMinutes} minutes!`:`${hoursPlayed} hours!`;
+
+  // Top games list
+  const listWrapper = document.querySelector(".top-games-list");
+  listWrapper.innerHTML="";
+  topGames.forEach((game,i)=>{
+    const mins = totalPlaytime[game];
+    const card = document.createElement("div");
+    card.className="game-card";
+    card.innerHTML = `<div class="rank">${i+1}</div>
+      <div class="game-info"><strong>${game}</strong><br><span>${mins<120? mins+" min":(mins/60).toFixed(1)+" hrs"}</span></div>`;
+    listWrapper.appendChild(card);
+  });
+
+  // Featured game section
+  document.querySelectorAll(".featured-game").forEach(f=>{
+    f.querySelector("h2").textContent = mostPlayed;
+    f.querySelector("p").textContent = totalPlaytime[mostPlayed]<120? totalPlaytime[mostPlayed]+" min":(totalPlaytime[mostPlayed]/60).toFixed(1)+" hrs";
+    f.querySelector("img").src='https://via.placeholder.com/400x400.png?text='+mostPlayed.split(' ').map(w=>w[0].toUpperCase()).join('');
+  });
+
+  // Monthly graph
+  const wrapperColumn = document.getElementById("month-graph");
+  wrapperColumn.innerHTML="";
+  const allBars = Object.values(monthlyGamesColumn).flat();
+  const maxMins = Math.max(...allBars.map(g=>g.mins),1);
+  const containerHeight = wrapperColumn.clientHeight-50;
+
+  for(const month in monthlyGamesColumn){
+    const col = document.createElement("div"); col.className="month-column";
+    const container = document.createElement("div"); container.className="bar-container";
+    monthlyGamesColumn[month].sort((a,b)=>b.mins-a.mins);
+
+    monthlyGamesColumn[month].forEach(game=>{
+      const bar = document.createElement("div"); bar.className="game-bar";
+      const height = (game.mins/maxMins)*containerHeight;
+      bar.style.height = height+"px";
+      const img = document.createElement("img"); img.src = game.img; bar.appendChild(img);
+      const tooltip = document.createElement("div"); tooltip.className="tooltip";
+      tooltip.textContent = `${game.game}: ${game.mins} min`;
+      bar.appendChild(tooltip);
+      container.appendChild(bar);
+    });
+
+    col.appendChild(container);
+    const label = document.createElement("span"); label.className="month-label"; label.textContent=month;
+    col.appendChild(label);
+    wrapperColumn.appendChild(col);
+  }
+});
+</script>
+
+</body>
+</html>

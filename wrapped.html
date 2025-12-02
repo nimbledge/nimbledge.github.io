@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CoolUBG Wrapped</title>
+<script src="/pages.js"></script>
+
+<style>
+/* Font faces */
+@font-face {
+  font-family: "Nunito";
+  font-weight: 800;
+  src: url(/fonts/Nunito.ttf);
+}
+
+@font-face {
+  font-family: "League Gothic";
+  src: url(/fonts/LeagueGothic.ttf);
+}
+
+/* Body */
+body {
+  margin: 0;
+  font-family: "Nunito", sans-serif;
+  background: #121212;
+  color: #fff;
+  scroll-behavior: smooth;
+}
+
+/* Headings */
+h1,
+h2,
+p {
+  margin: 0;
+  text-align: center;
+}
+
+h1 {
+  font-family: "League Gothic", sans-serif;
+  font-weight: 900;
+  font-size: 5vw;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+h2 {
+  font-family: "Nunito", sans-serif;
+  font-weight: 700;
+  font-size: 2.5vw;
+  color: #eee;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.35);
+}
+
+p {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.5vw;
+  color: #fff;
+  margin-bottom: 12px;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Sections */
+section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+  min-height: 100vh;
+  text-align: center;
+}
+
+/* Gradients */
+.gradient-1 {
+  background: linear-gradient(
+    135deg,
+    #58aafc 0%,
+    #4a99f0 30%,
+    #3b7dd8 60%,
+    #141414 100%
+  );
+}
+.gradient-2 {
+  background: linear-gradient(
+    145deg,
+    #fc5858 0%,
+    #f97a7a 30%,
+    #d058fc 70%,
+    #141414 100%
+  );
+}
+.gradient-3 {
+  background: linear-gradient(
+    120deg,
+    #d058fc 0%,
+    #b875fc 25%,
+    #fc7a7a 55%,
+    #141414 100%
+  );
+}
+.gradient-4 {
+  background: linear-gradient(
+    135deg,
+    #7c5cfc 0%,
+    #945cfc 30%,
+    #d058fc 60%,
+    #141414 100%
+  );
+}
+.gradient-5 {
+  background: linear-gradient(
+    150deg,
+    #fc7a7a 0%,
+    #fc9e58 25%,
+    #fcb858 50%,
+    #141414 100%
+  );
+}
+.gradient-6 {
+  background: linear-gradient(
+    135deg,
+    #58aafc 0%,
+    #4a99f0 30%,
+    #7c5cfc 60%,
+    #58aafc 85%,
+    #141414 100%
+  );
+}
+
+.year {
+  font-size: 7vw;
+}
+
+/* Top Games Section */
+.top-games-wrapper {
+  display: grid;
+  grid-template-columns: 1fr auto; /* left = list, right = featured */
+  grid-template-rows: auto auto; /* top row = list + featured, bottom row = summary */
+  gap: 30px 40px; /* vertical + horizontal spacing */
+  max-width: 1100px;
+  width: 100%;
+  margin: 40px auto 0;
+}
+
+/* Top row wrapper: forces left list to match right featured height */
+.top-games-top-row {
+  display: flex;
+  align-items: stretch; /* make both columns same height */
+  gap: 40px;
+  width: 100%;
+}
+
+/* Left column = Top Games List */
+.top-games-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* push first game to top, last game to bottom */
+  gap: 18px;
+  flex: 1;
+}
+
+/* Individual game card */
+.game-card {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 18px;
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  align-items: center;
+}
+
+.top-10-games-list .game-card {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 18px;
+  border-radius: 0px;
+  backdrop-filter: blur(8px);
+  align-items: center;
+}
+
+.top-10-games-list .game-card .game-info {
+  display: grid;
+  justify-items: center;
+}
+
+.top-10-games-list .game-card img {
+  width: 70%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.rank {
+  font-size: 3vw;
+  font-weight: 900;
+  text-align: center;
+}
+.game-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.game-name {
+  font-family: "Nunito", sans-serif;
+  font-weight: 800;
+  font-size: 2.2vw;
+  color: #fff;
+}
+.game-subtext {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.8vw;
+  color: #fff;
+}
+
+/* Right column = Featured Game */
+.featured-game {
+  width: 320px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 22px;
+  border-radius: 6px;
+  backdrop-filter: blur(6px);
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.featured-game img {
+  width: 100%;
+  border-radius: 4px;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+/* Bottom Summary Row */
+.top-games-summary {
+  grid-column: 1 / 3; /* full width */
+  display: flex;
+  justify-content: space-between; /* space evenly */
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+  margin-top: 30px; /* spacing from top row */
+  padding: 15px 20px; /* smaller vertical padding, horizontal matches top row */
+  text-align: center;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  gap: 20px;
+  flex-wrap: nowrap; /* prevent wrapping unless absolutely necessary */
+}
+
+.top-games-summary div {
+  flex: 1; /* each summary item takes equal space */
+  text-align: center;
+}
+
+.top-games-summary h2 {
+  font-family: "Nunito", sans-serif;
+  font-size: 2.4vw; /* slightly smaller for balance */
+  margin-bottom: 6px;
+}
+
+.top-games-summary p {
+  font-size: 1.6vw;
+  margin: 0;
+}
+
+/* Monthly Graph */
+.month-column-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 90%;
+  max-width: 1400px;
+  height: 60vh;
+  margin-top: 25px;
+  overflow: visible;
+}
+
+.month-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  width: 60px;
+  height: 100%;
+  position: relative;
+}
+
+.bar-stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100%;
+}
+
+.game-bar {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0 !important;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: box-shadow 0.15s ease, border-radius 0.15s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.game-bar:hover {
+  border-radius: 0.4vw !important;
+  max-width: none;
+  min-width: max-content;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 99999;
+  bottom: 102.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 6px;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 4px;
+  transition: 0.15s;
+}
+
+.game-bar:hover .tooltip {
+  opacity: 1;
+}
+
+.month-label {
+  margin-top: 6px;
+  font-family: "Nunito", sans-serif;
+  font-size: 1.2vw;
+  color: #fff;
+  text-align: center;
+}
+
+/* Most Common Day */
+.common-day-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.common-day-wrapper p {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.6vw;
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  h1 {
+    font-size: 8vw;
+  }
+  h2 {
+    font-size: 4vw;
+  }
+  p {
+    font-size: 3vw;
+  }
+  .rank {
+    font-size: 5vw;
+  }
+  .game-name {
+    font-size: 3.5vw;
+  }
+  .game-subtext {
+    font-size: 3vw;
+  }
+  .month-label {
+    font-size: 3vw;
+  }
+  .tooltip {
+    font-size: 3vw;
+  }
+
+  /* Stack top games vertically */
+  .top-games-top-row {
+    flex-direction: column;
+  }
+
+  .featured-game {
+    width: 100%;
+  }
+
+  .top-games-summary {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+#most-popular-game-stats {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.mostPopularSection .game-bar:hover {
+  transform: none !important;
+  left: auto !important;
+  max-width: 100% !important;
+  min-width: auto !important;
+  box-shadow: none !important;
+  z-index: 9999;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat .value {
+  font-size: 2.5vw;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.3rem;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+#nameInput {
+  font-family: "Nunito", sans-serif;
+  font-size: 2em; /* adjust as needed */
+  color: #fff;
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+#nameInput::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.top-games-summary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+.summary-item {
+  font-family: "Nunito", sans-serif;
+  font-weight: 700;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  line-height: 1.2;
+  max-width: 25%; /* 4 items side by side */
+  white-space: normal;
+  word-break: break-word;
+}
+</style>
+</head>
+<body>
+<section class="gradient-1">
+  <h1 class="year"></h1>
+  <h2>Your Gaming Year</h2>
+  <p>Scroll down to see your cool unblocked gaming habits</p>
+</section>
+
+<section class="gradient-2">
+  <h1>0</h1>
+  <h2>Hours Played</h2>
+  <p>0</p>
+  <p id="2">0</p>
+</section>
+
+<section class="gradient-3">
+  <h1>Top Tags</h1>
+  <h2>Loading...</h2>
+  <p>The genres that dominated your year</p>
+</section>
+
+<section class="gradient-5">
+  <h1 style="margin-bottom:20px;">Most Common Day & Hour</h1>
+  <div class="common-day-wrapper">
+    <p id="common-hour">Loading hour...</p>
+  </div>
+</section>
+
+<section class="mostPopularSection">
+  <h1>Most Popular Game</h1>
+  <div id="most-popular-game-stats">
+    <div class="stat">
+      <div class="value" id="game-play-percentage">0%</div>
+    </div>
+    <div class="stat">
+      <div class="value" id="game-session-count">0</div>
+    </div>
+  </div>
+  <div class="month-column-wrapper" id="most-popular-game-graph"></div>
+</section>
+
+<section class="gradient-4">
+  <h1>Games Played Each Month</h1>
+  <div class="month-column-wrapper" id="month-graph"></div>
+</section>
+
+<section class="gradient-6">
+  <h1 id="top-10-heading"></h1>
+  <div class="top-10-games-list"></div>
+</section>
+
+<section class="gradient-6">
+  <h1 id="top-games-heading">
+    <img
+      src="/images/icons/logo.png"
+      width="100em"
+      style="vertical-align: middle; filter: drop-shadow(0 0 8px rgba(0,0,0,0.4)); transform: translateY(-10%);"
+    />
+  </h1>
+  <div class="top-games-wrapper">
+    <div class="top-games-list"></div>
+
+    <div class="featured-game">
+      <img src="" />
+      <h2 class="game-name">Game</h2>
+      <p class="game-subtext">0 hrs</p>
+      <input type="text" id="nameInput" placeholder="Enter Name Here" />
+    </div>
+
+    <div class="top-games-summary">
+      <div class="summary-item" id="total-hours">
+        In total, you spent HOURSVAR hours playing
+      </div>
+      <div class="summary-item" id="school-year-percent">
+        Which is also SCHOOLYEARPERCENTVAR% of the school year 😭
+      </div>
+      <div class="summary-item" id="unique-sessions-count">
+        Game Sessions played: UNIQUESESSIONSVAR
+      </div>
+      <div class="summary-item" id="unique-sessions-count">
+        Games played: GAMESNUMBERVAR
+      </div>
+      <div class="summary-item" id="longest-streak">
+        Longest Daily Streak: LONGESTSTREAKVAR
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h1>Thanks for Playing!<br><br></h1>
+  
+  <!-- Survey Link: copies a human-readable summary + CSV export, then opens form -->
+  <h1>
+    <a
+      id="surveyLink"
+      style="font-size: xxx-large; color: white;"
+      href="https://docs.google.com/forms/d/e/1FAIpQLSesCZExM0uoauFI9_aRVFHGztZZsBRtmdcg_QD3XHvjrye28Q/viewform?usp=dialog"
+      target="_blank"
+      rel="noopener"
+    >
+      Click here to Participate in the CoolUBG Wrapped Playtime Survey
+    </a>
+  </h1>
+  <p>Submitting the your CoolUBG wrapped Data: <br>Allows for game additions to be tailored to user preferences,<br>And it allows for more insightful statistics next year!</p>
+</section>
+
+<script>
+const PDB_NAME = "PlaytimeDB";
+const PSTORE_NAME = "playtimeLogs";
+
+function PopenB() {
+  return new Promise((resolve, reject) => {
+    let req = indexedDB.open(PDB_NAME, 1);
+    req.onsuccess = (e) => resolve(e.target.result);
+    req.onerror = (e) => reject(e.target.error);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(PSTORE_NAME)) {
+        db.createObjectStore(PSTORE_NAME, { keyPath: "gameId" });
+      }
+    };
+  });
+}
+
+function formatTime(mins) {
+  return mins < 120
+    ? mins + " min"
+    : Math.round((mins / 60) * 10) / 10 + " hrs";
+}
+function formatHours(mins) {
+  return (mins / 60).toFixed(1);
+}
+
+function to12Hour(hour) {
+  const h = hour % 12 || 12;
+  const ampm = hour >= 12 ? "PM" : "AM";
+  return `${h} ${ampm}`;
+}
+
+function getFormattedName(gameId) {
+  const page = pagesData.find((p) => p.name === gameId);
+  return page?.formatted_Name || gameId;
+}
+
+function getCategoriesForGame(gameId) {
+  const page = pagesData.find((p) => p.name === gameId);
+  return Array.isArray(page?.category) ? page.category : ["None"];
+}
+
+// Enhanced year selection: supports "?year=2025" and bare "?2025"
+function getSelectedYear() {
+  const search = window.location.search || "";
+  const params = new URLSearchParams(search);
+  const currentYear = new Date().getFullYear();
+
+  // 1) Standard ?year=2025
+  const explicit = params.get("year");
+  if (explicit && /^\d{4}$/.test(explicit)) return parseInt(explicit, 10);
+
+  // 2) Bare token like ?2025 or any 4-digit token anywhere in the query
+  const raw = search.replace(/^\?/, "");
+  const tokens = raw.split(/[&=]/).filter(Boolean);
+  const bareYear = tokens.find((t) => /^\d{4}$/.test(t));
+  if (bareYear) return parseInt(bareYear, 10);
+
+  // 3) Fallback to current year
+  return currentYear;
+}
+
+/* Data container used for export */
+let computedData = {
+  year: null,
+  totalMinutes: 0,
+  totalHoursStr: "0.0",
+  schoolYearPercent: 0,
+  topTags: [],
+  top10: [], // [{gameId, name, mins}]
+  topGamesTop3: [],
+  mostPlayedId: "No Data",
+  mostPlayedName: "No Data",
+  mostPlayedHoursStr: "0.0",
+  mostPlayedMonthly: [], // [{month, mins}]
+  playPercentagePct: 0, // numeric like 56.3
+  topGameSessions: 0,
+  uniqueSessionsTotal: 0,
+  longestStreakDays: 0,
+  uniqueGamesCount: 0,
+  mostCommonDayHourText: "",
+  monthlyStacks: [], // [{month, totalMins, games:[{gameId, name, mins}]}]
+};
+
+/* CSV helpers */
+function csvEscape(value) {
+  const s = value == null ? "" : String(value);
+  if (/[",\n]/.test(s)) {
+    return `"${s.replace(/"/g, '""')}"`;
+  }
+  return s;
+}
+function toCsvRow(arr) {
+  return arr.map(csvEscape).join(",");
+}
+
+/* Human-readable summary (first line = year) */
+function buildHumanSummary() {
+  const lines = [];
+  const y = computedData.year ?? new Date().getFullYear();
+
+  // First line: year
+  lines.push(String(y));
+
+  lines.push(
+    `Total Playtime: ${computedData.totalMinutes} min (${computedData.totalHoursStr} hrs) — ${computedData.schoolYearPercent}% of the school year`
+  );
+
+  lines.push(`Top Tags: ${computedData.topTags.join(", ") || "None"}`);
+
+  // Top 10
+  if (computedData.top10.length) {
+    lines.push("Top 10 Games:");
+    computedData.top10.forEach((g, i) => {
+      lines.push(`  ${i + 1}. ${g.name} — ${formatTime(g.mins)}`);
+    });
+  } else {
+    lines.push("Top 10 Games: None");
+  }
+
+  // Top 3 list
+  if (computedData.topGamesTop3.length) {
+    lines.push("Top Games (Top 3):");
+    computedData.topGamesTop3.forEach((g, i) => {
+      lines.push(`  ${i + 1}. ${g.name} — ${formatTime(g.mins)}`);
+    });
+  }
+
+  // Most popular game
+  lines.push(`Most Popular Game: ${computedData.mostPlayedName}`);
+  lines.push(
+    `  Playtime: ${computedData.mostPlayedHoursStr} hrs | Sessions: ${computedData.topGameSessions} | Share: ${computedData.playPercentagePct}%`
+  );
+
+  // Most common day/hour
+  lines.push(`Most Common Day & Hour: ${computedData.mostCommonDayHourText}`);
+
+  // Monthly totals + per-game mins
+  lines.push("Games Played Each Month:");
+  computedData.monthlyStacks.forEach((m) => {
+    lines.push(`  ${m.month}: ${formatTime(m.totalMins)}`);
+    if (m.games?.length) {
+      m.games.forEach((g) => {
+        lines.push(`    - ${g.name}: ${formatTime(g.mins)}`);
+      });
+    }
+  });
+
+  // Most popular monthly distribution
+  if (computedData.mostPlayedMonthly?.length) {
+    lines.push(
+      `Most Popular Game Monthly Distribution (${computedData.mostPlayedName}):`
+    );
+    const total = computedData.mostPlayedMonthly.reduce(
+      (s, i) => s + i.mins,
+      0
+    ) || 1;
+    computedData.mostPlayedMonthly.forEach((i) => {
+      const pct = ((i.mins / total) * 100).toFixed(1);
+      lines.push(`  ${i.month}: ${formatTime(i.mins)} (${pct}%)`);
+    });
+  }
+
+  // Summary stats
+  lines.push(`Unique Sessions Played: ${computedData.uniqueSessionsTotal}`);
+  lines.push(`Longest Daily Streak (days): ${computedData.longestStreakDays}`);
+  lines.push(`Unique Games Played: ${computedData.uniqueGamesCount}`);
+
+  // Optional name
+  const nameEl = document.getElementById("nameInput");
+  if (nameEl && nameEl.value?.trim()) {
+    lines.push(`Submitted By: ${nameEl.value.trim()}`);
+  }
+
+  return lines.join("\n");
+}
+
+/* Machine-friendly CSV export (multi-section) */
+function buildSurveyCSV() {
+  const lines = [];
+
+  // Section: summary
+  lines.push("summary");
+  lines.push(
+    toCsvRow([
+      "year",
+      "total_minutes",
+      "total_hours",
+      "school_year_percent",
+      "top_tags_semicolon_joined",
+      "most_popular_game",
+      "most_popular_game_hours",
+      "most_popular_game_sessions",
+      "most_popular_game_share_percent",
+      "most_common_day_hour",
+      "unique_sessions",
+      "longest_streak_days",
+      "unique_games",
+      "submitted_by",
+    ])
+  );
+  const nameEl = document.getElementById("nameInput");
+  lines.push(
+    toCsvRow([
+      computedData.year ?? "",
+      computedData.totalMinutes,
+      computedData.totalHoursStr,
+      computedData.schoolYearPercent,
+      (computedData.topTags || []).join("; "),
+      computedData.mostPlayedName,
+      computedData.mostPlayedHoursStr,
+      computedData.topGameSessions,
+      computedData.playPercentagePct,
+      computedData.mostCommonDayHourText,
+      computedData.uniqueSessionsTotal,
+      computedData.longestStreakDays,
+      computedData.uniqueGamesCount,
+      nameEl && nameEl.value ? nameEl.value.trim() : "",
+    ])
+  );
+  lines.push("");
+
+  // Section: top10_games
+  lines.push("top10_games");
+  lines.push(toCsvRow(["rank", "game_id", "game_name", "minutes"]));
+  (computedData.top10 || []).forEach((g, idx) => {
+    lines.push(toCsvRow([idx + 1, g.gameId, g.name, g.mins]));
+  });
+  lines.push("");
+
+  // Section: monthly_totals
+  lines.push("monthly_totals");
+  lines.push(toCsvRow(["month", "total_minutes"]));
+  (computedData.monthlyStacks || []).forEach((m) => {
+    lines.push(toCsvRow([m.month, m.totalMins]));
+  });
+  lines.push("");
+
+  // Section: monthly_game_minutes
+  lines.push("monthly_game_minutes");
+  lines.push(toCsvRow(["month", "game_id", "game_name", "minutes"]));
+  (computedData.monthlyStacks || []).forEach((m) => {
+    (m.games || []).forEach((g) => {
+      lines.push(toCsvRow([m.month, g.gameId, g.name, g.mins]));
+    });
+  });
+  lines.push("");
+
+  // Section: most_popular_monthly
+  lines.push("most_popular_monthly");
+  lines.push(toCsvRow(["month", "minutes", "percent_of_top_game_total"]));
+  const totalTop = (computedData.mostPlayedMonthly || []).reduce(
+    (s, i) => s + (i.mins || 0),
+    0
+  ) || 1;
+  (computedData.mostPlayedMonthly || []).forEach((i) => {
+    const pct = ((i.mins || 0) / totalTop) * 100;
+    lines.push(toCsvRow([i.month, i.mins || 0, pct.toFixed(1)]));
+  });
+
+  return lines.join("\n");
+}
+
+/* Combined export: human-readable summary + CSV (for Excel/scripts) */
+function buildCombinedExport() {
+  const summaryText = buildHumanSummary(); // First line = year
+  const csv = buildSurveyCSV();
+  return [
+    summaryText,
+    "",
+    "==== MACHINE-READABLE CSV EXPORT BELOW ====",
+    csv,
+  ].join("\n");
+}
+
+/* Copy text to clipboard with fallback */
+async function copyTextToClipboard(text) {
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (e) {
+    console.warn("navigator.clipboard.writeText failed", e);
+  }
+  // Fallback
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.top = "-9999px";
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch (e) {
+    document.body.removeChild(ta);
+    console.warn("execCommand copy failed", e);
+    return false;
+  }
+}
+
+/* Hook link: copy combined export then navigate */
+(function wireSurveyLink() {
+  const link = document.getElementById("surveyLink");
+  if (!link) return;
+  link.addEventListener("click", async () => {
+    const payload = buildCombinedExport();
+    const copied = await copyTextToClipboard(payload);
+    if (!copied) {
+      alert(
+        "Failed to copy survey data to clipboard. You can still proceed to the form."
+      );
+    }
+    // Navigation proceeds automatically (target=_blank)
+  });
+})();
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const year = getSelectedYear();
+  computedData.year = year;
+
+  // Dynamic main heading with SVG, uses selected year
+  document.querySelector(".year").innerHTML = `
+    ${year} 
+    <a href="/index.html#" style="display: inline-block; vertical-align: middle; transform: translateY(-8.5%)">
+      <svg width="auto" height="1.5em" viewBox="0 0 1552 800" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+  <defs>
+    <!-- Define the shapes once so we can reuse them for mask and stroke -->
+    <g id="textShapes" transform="translate(0 800) scale(.1 -.1)">
+      <path d="m13025 7247c-3-6-4-163-4-347l4-335 1008-3 1007-2-2 347-3 348-1003 3c-800 2-1004 0-1007-11z"/>
+      <path d="m8332 6898 3-343 1018-3 1017-2v345 345h-1020-1020l2-342z"/>
+      <path d="m10762 6893 3-348 888-3 887-2v350 350h-890-890l2-347z"/>
+      <path d="m1255 6230c-252-22-452-114-620-284-133-135-217-302-254-510-8-41-11-502-11-1445 0-1519-2-1459 60-1636 104-295 344-508 655-580 153-36 404-36 555-1 174 40 331 127 459 256 114 114 192 250 238 417l27 98 4 413 3 412h-389-390l-4-367-3-368-30-60c-39-78-91-108-176-103-70 5-106 30-145 100l-29 53-3 1335c-2 924 1 1351 8 1387 29 140 149 202 270 141 36-19 51-35 75-82l30-60 3-368 4-368h390 389l-3 413c-4 392-5 416-27 497-45 165-117 293-235 418-149 157-381 270-589 287-147 12-174 12-262 5z"/>
+      <path d="m13847 6219c-230-34-460-164-603-343-95-119-159-262-191-429-17-86-18-185-18-1467 0-1293 1-1381 18-1480 46-257 121-408 274-550 167-154 407-224 682-197 189 18 359 104 416 212 11 19 24 34 29 32 6-2 21-49 34-105l23-102h260 259l-2 1120-3 1120h-545-545l-3-345-2-344 137-3 138-3 3-354c3-387-3-442-54-508-34-44-59-56-122-56-69 0-98 21-137 98l-30 60v1380c0 1487-2 1420 52 1493 35 46 77 65 134 60 65-7 92-27 126-95l28-58 3-407 3-408h410 410l-3 453c-5 522-5 527-102 722-135 270-376 445-690 500-95 16-291 18-389 4z"/>
+      <path d="m10790 3989v-2210l488 3c473 4 489 5 572 27 380 104 629 408 716 876 24 126 27 573 6 695-21 117-60 267-89 339-59 149-168 294-274 362l-48 32 64 49c169 131 264 322 306 618 16 110 16 431 0 540-72 500-346 787-825 865-70 11-189 15-503 15h-413v-2211zm810 1535c215-50 310-222 310-559-1-253-56-409-178-502-52-40-123-62-219-70l-73-6v577 576h48c26 0 76-7 112-16zm-2-1769c35-8 77-22 94-31 148-76 217-273 218-614 0-302-57-501-170-592-49-38-140-69-227-75l-73-6v667 666h48c26 0 75-7 110-15z"/>
+      <path d="m6960 3990v-2200h395 395v2200 2200h-395-395v-2200z"/>
+      <path d="m8333 4363c3-1615 5-1805 20-1868 48-209 126-362 249-486 164-167 366-257 624-278 197-16 372 7 533 69 245 95 460 329 533 580 49 171 48 123 48 2013v1767h-415-415l-2-1782-3-1783-29-58c-37-76-72-99-144-94-65 5-99 28-132 93l-25 48-3 1788-2 1788h-420-421l4-1797z"/>
+      <path d="m3475 5129c-100-15-205-50-300-98-73-37-107-63-180-136-104-104-163-197-205-324-56-167-55-153-55-1126s-1-959 55-1126c41-124 101-220 200-320 159-161 334-233 600-246 469-23 815 214 932 639l23 83v970 970l-23 83c-43 158-113 281-223 392-113 114-252 189-422 226-86 19-318 27-402 13zm246-636c42-25 70-91 81-188 5-48 7-449 5-922-4-924-2-896-67-964-34-36-41-39-89-39-97 0-140 46-161 171-14 90-14 1715 1 1794 14 76 42 131 77 149 37 21 117 20 153-1z"/>
+      <path d="m5570 5130c-74-10-170-35-242-64-203-82-376-266-455-482-53-148-54-163-50-1180 3-930 3-940 25-1019 47-171 156-342 287-448 71-57 216-131 299-152 105-26 228-38 346-32 262 13 439 86 600 247 122 123 192 253 236 441 15 66 18 160 21 909 5 904 0 1028-42 1173-79 274-275 481-535 565-141 46-335 63-490 42zm230-637c40-23 68-78 80-159 17-108 8-1786-9-1839-7-22-30-57-51-77-34-34-43-38-89-38-82 0-117 27-148 115-17 47-18 112-18 950 0 844 1 903 18 952 26 75 73 113 138 113 30 0 63-7 79-17z"/>
+      <path d="m13085 1407c-3-6-4-163-3-347l3-335 1008-3 1007-2-2 347-3 348-1003 3c-800 2-1004 0-1007-11z"/>
+      <path d="m8392 1058 3-343 1018-3 1017-2v345 345h-1020-1020l2-342z"/>
+      <path d="m10822 1053 3-348 888-3 887-2v350 350h-890-890l2-347z"/>
+    </g>
+
+    <mask id="textMask">
+      <!-- Fill the shapes white for the mask -->
+      <use href="#textShapes" fill="white"/>
+    </mask>
+
+    <filter id="textShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="5" dy="5" stdDeviation="5" flood-color="rgba(0,0,0,0.5)" />
+    </filter>
+
+    <linearGradient id="fullGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B6B" />
+      <stop offset="50%" stop-color="#FFD93D" />
+      <stop offset="100%" stop-color="#6BCB77" />
+    </linearGradient>
+  </defs>
+
+  <!-- Masked gradient content -->
+  <rect width="100%" height="100%" fill="url(#fullGradient)" mask="url(#textMask)" filter="url(#textShadow)"/>
+
+  <!-- Stroke around the shapes -->
+  <use href="#textShapes"
+       fill="none"
+       stroke="#000"
+       stroke-width="1em"
+       stroke-linejoin="round"
+       stroke-linecap="round"
+       vector-effect="non-scaling-stroke"/>
+</svg>
+    </a> 
+    Wrapped
+  `;
+
+  // Update non-SVG headings dynamically (no hardcoded year)
+  const top10Heading = document.getElementById("top-10-heading");
+  if (top10Heading) top10Heading.textContent = `Your Top 10 Games of ${year}`;
+
+  const topGamesHeading = document.getElementById("top-games-heading");
+  if (topGamesHeading) {
+    const img = topGamesHeading.querySelector("img");
+    topGamesHeading.textContent = `Your Top Games of ${year} `;
+    if (img) topGamesHeading.appendChild(img);
+  }
+
+  const db = await PopenB();
+  const tx = db.transaction(PSTORE_NAME, "readonly");
+  const store = tx.objectStore(PSTORE_NAME);
+
+  const monthNames = [
+    "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+  ];
+  const weekdays = [
+    "Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday",
+  ];
+
+  const allGames = await new Promise((resolve) => {
+    const res = [];
+    store.openCursor().onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        if (cursor.value.gameId.toLowerCase() !== "unknown") res.push(cursor.value);
+        cursor.continue();
+      } else resolve(res);
+    };
+  });
+
+  // PER-YEAR ONLY: build totals, monthly stacks, weekday/hour
+  const totalPlaytime = {}; // per-game minutes (selected year only)
+  const monthlyGamesColumn = {}; // month -> { gameId: mins }
+  monthNames.forEach((m) => (monthlyGamesColumn[m] = {}));
+  const dayHourCount = {}; // weekday -> hour -> count (selected year only)
+
+  allGames.forEach((entry) => {
+    const game = entry.gameId;
+    const logs = entry.logs || [];
+
+    // Filter logs to the selected year
+    const yearLogs = logs.filter((l) => {
+      const [d] = String(l).split(",");
+      const [, , logYear] = d.split("/").map(Number);
+      return logYear === year;
+    });
+
+    // Per-game minutes this year
+    const minsThisYear = yearLogs.length;
+    if (minsThisYear > 0) {
+      totalPlaytime[game] = (totalPlaytime[game] || 0) + minsThisYear;
+    }
+
+    // Month + weekday/hour breakdown for this year
+    yearLogs.forEach((l) => {
+      const [d, t] = String(l).split(",");
+      const [day, month, logYear] = d.split("/").map(Number);
+      const hour = parseInt(t, 10);
+      const weekday = weekdays[new Date(logYear, month - 1, day).getDay()];
+      const monthKey = monthNames[month - 1];
+
+      // weekday/hour counts (for "Most Common Day & Hour")
+      if (!dayHourCount[weekday]) dayHourCount[weekday] = {};
+      dayHourCount[weekday][hour] = (dayHourCount[weekday][hour] || 0) + 1;
+
+      // monthly stack per game
+      monthlyGamesColumn[monthKey][game] =
+        (monthlyGamesColumn[monthKey][game] || 0) + 1;
+    });
+  });
+
+  // Convert monthlyGamesColumn to arrays expected by render code
+  Object.keys(monthlyGamesColumn).forEach((m) => {
+    monthlyGamesColumn[m] = Object.entries(monthlyGamesColumn[m]).map(
+      ([game, mins]) => ({ game, mins })
+    );
+  });
+
+  // --- Top Tags (selected year only, weighted by minutes) ---
+  const categoryMinutes = {};
+  allGames.forEach((entry) => {
+    const game = entry.gameId;
+    const mins = totalPlaytime[game] || 0; // already year-filtered
+    if (!mins) return;
+    const categories = getCategoriesForGame(game);
+    categories.forEach((cat) => {
+      categoryMinutes[cat] = (categoryMinutes[cat] || 0) + mins;
+    });
+  });
+  const topCategories = Object.entries(categoryMinutes)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([cat]) => cat);
+  document.querySelector(".gradient-3 h2").textContent =
+    topCategories.join(" • ");
+  computedData.topTags = topCategories;
+
+  // Totals (selected year only)
+  const totalMinutes = Object.values(totalPlaytime).reduce((a, b) => a + b, 0);
+  computedData.totalMinutes = totalMinutes;
+  computedData.totalHoursStr = formatHours(totalMinutes);
+  computedData.schoolYearPercent =
+    Math.round(((totalMinutes / 57000) * 100) * 100) / 100;
+
+  const hoursSection = document.querySelector(".gradient-2");
+  hoursSection.querySelector("h1").textContent = computedData.totalHoursStr;
+  hoursSection.querySelector("p").textContent =
+    "That's a total of " + totalMinutes + " minutes!";
+  hoursSection.querySelector("#\\32").textContent =
+    "You spent " + computedData.schoolYearPercent +
+    "% of your school year playing games";
+
+  // Top games (selected year only)
+  const topGames = Object.keys(totalPlaytime)
+    .sort((a, b) => totalPlaytime[b] - totalPlaytime[a])
+    .slice(0, 3);
+  const mostPlayed = topGames[0] || "No Data";
+  computedData.mostPlayedId = mostPlayed;
+  computedData.mostPlayedName = getFormattedName(mostPlayed);
+  computedData.mostPlayedHoursStr = formatHours(totalPlaytime[mostPlayed] || 0);
+
+  const listWrapper = document.querySelector(".top-games-list");
+  listWrapper.innerHTML = "";
+  computedData.topGamesTop3 = [];
+  topGames.forEach((game, i) => {
+    const name = getFormattedName(game);
+    computedData.topGamesTop3.push({ gameId: game, name, mins: totalPlaytime[game] });
+    const card = document.createElement("div");
+    card.className = "game-card";
+    card.innerHTML = `
+      <div class="rank">${i + 1}</div>
+      <div class="game-info">
+        <div class="game-name">${name}</div>
+        <div class="game-subtext">${formatTime(totalPlaytime[game])}</div>
+      </div>`;
+    listWrapper.appendChild(card);
+  });
+
+  // Top 10 games list (selected year only)
+  const top10Games = Object.keys(totalPlaytime)
+    .sort((a, b) => totalPlaytime[b] - totalPlaytime[a])
+    .slice(0, 10);
+
+  const listWrapper10 = document.querySelector(".top-10-games-list");
+  listWrapper10.innerHTML = "";
+  computedData.top10 = [];
+  top10Games.forEach((game, i) => {
+    const name = getFormattedName(game);
+    computedData.top10.push({ gameId: game, name, mins: totalPlaytime[game] });
+    const card = document.createElement("div");
+    card.className = "game-card";
+    card.innerHTML = `
+      <div class="rank">${i + 1}</div>
+      <div class="game-info">
+        <img src="images/games-512/${game}.png" alt="${game} image">
+        <div class="game-name">${name}</div>
+        <div class="game-subtext">${formatTime(totalPlaytime[game])}</div>
+      </div>`;
+    listWrapper10.appendChild(card);
+  });
+
+  // Featured game (selected year only)
+  const featured = document.querySelector(".featured-game");
+  featured.querySelector(".game-name").textContent = computedData.mostPlayedName;
+  featured.querySelector(".game-subtext").textContent = formatTime(
+    totalPlaytime[mostPlayed] || 0
+  );
+  featured.querySelector("img").src = `images/games-512/${mostPlayed}.png`;
+
+  // --- Most common day & hour (selected year only) ---
+  let maxDay = "", maxDayCount = 0;
+  Object.entries(dayHourCount).forEach(([day, hours]) => {
+    const total = Object.values(hours).reduce((a, b) => a + b, 0);
+    if (total > maxDayCount) {
+      maxDay = day;
+      maxDayCount = total;
+    }
+  });
+
+  let maxHour = 0, maxHourCount = 0;
+  Object.entries(dayHourCount[maxDay] || {}).forEach(([h, count]) => {
+    if (count > maxHourCount) {
+      maxHour = parseInt(h);
+      maxHourCount = count;
+    }
+  });
+
+  const commonDayHourText = `Between ${to12Hour(maxHour)} - ${to12Hour((maxHour + 1) % 24)} on a ${maxDay}`;
+  document.getElementById("common-hour").textContent = commonDayHourText;
+  computedData.mostCommonDayHourText = commonDayHourText;
+
+  // --- Most Popular Game monthly graph (percentage-based; selected year only) ---
+  const topGameMonthlyWrapper = document.getElementById("most-popular-game-graph");
+  topGameMonthlyWrapper.innerHTML = "";
+
+  const topGameMonthlyData = monthNames.map((month) => {
+    const entry = (monthlyGamesColumn[month] || []).find(
+      (item) => item.game === mostPlayed
+    );
+    return { month, mins: entry ? entry.mins : 0 };
+  });
+  computedData.mostPlayedMonthly = topGameMonthlyData.slice();
+
+  const mostPopularSection = document.querySelector(".mostPopularSection");
+  mostPopularSection.querySelector("h1").textContent = computedData.mostPlayedName;
+  mostPopularSection.style.position = "relative";
+  mostPopularSection.style.backgroundColor = "transparent";
+
+  const bg = document.createElement("div");
+  bg.style.position = "absolute";
+  bg.style.top = "50%";
+  bg.style.left = "50%";
+  bg.style.width = "120%";
+  bg.style.height = "120%";
+  bg.style.transform = "translate(-50%, -50%)";
+  bg.style.backgroundImage = `url('images/games-512/${mostPlayed}.png')`;
+  bg.style.backgroundSize = "cover";
+  bg.style.backgroundPosition = "center";
+  bg.style.filter = "brightness(0.35)";
+  bg.style.zIndex = "-1";
+  mostPopularSection.prepend(bg);
+
+  function getAccentColor(imgUrl, callback) {
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = imgUrl;
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+      const colorCount = {};
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        // skip near-black/near-white
+        if ((r + g + b) / 3 < 30 || (r + g + b) / 3 > 220) continue;
+        const key = `${r},${g},${b}`;
+        colorCount[key] = (colorCount[key] || 0) + 1;
+      }
+
+      const sorted = Object.entries(colorCount).sort((a, b) => b[1] - a[1]);
+      const second = sorted[1] || sorted[0] || ["88,170,249"];
+
+      const [r, g, b] = second[0].split(",").map(Number);
+      const factor = 1.2; // slight saturation
+      const max = 255;
+      const saturated = [
+        Math.min(r * factor, max),
+        Math.min(g * factor, max),
+        Math.min(b * factor, max),
+      ];
+
+      callback(`rgb(${saturated.join(",")})`);
+    };
+  }
+
+  if (mostPlayed && mostPlayed !== "No Data") {
+    getAccentColor(`images/games-512/${mostPlayed}.png`, (accentColor) => {
+      const totalTopGameMins =
+        topGameMonthlyData.reduce((sum, item) => sum + item.mins, 0) || 1;
+
+      topGameMonthlyData.forEach((item) => {
+        const col = document.createElement("div");
+        col.className = "month-column";
+
+        const bar = document.createElement("div");
+        bar.className = "game-bar";
+        bar.style.height = (item.mins / totalTopGameMins) * 100 + "%";
+        bar.style.backgroundColor = accentColor;
+        bar.style.borderRadius = "4px";
+        bar.style.transition = "0.2s";
+        bar.style.position = "relative";
+        bar.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
+
+        const tip = document.createElement("div");
+        tip.className = "tooltip";
+        const percent = ((item.mins / totalTopGameMins) * 100).toFixed(1);
+        tip.textContent = `${percent}% of total playtime`;
+        bar.appendChild(tip);
+
+        col.appendChild(bar);
+
+        const label = document.createElement("div");
+        label.className = "month-label";
+        label.textContent = item.month;
+        col.appendChild(label);
+
+        topGameMonthlyWrapper.appendChild(col);
+      });
+    });
+  }
+
+  // Percentage of total playtime for the most-played (selected year only)
+  const totalMins =
+    monthNames.reduce((sum, month) => {
+      return (
+        sum +
+        (monthlyGamesColumn[month] || []).reduce((s, item) => s + item.mins, 0)
+      );
+    }, 0) || 1;
+
+  const topGameMins = topGameMonthlyData.reduce((sum, item) => sum + item.mins, 0);
+  const playPercentage = ((topGameMins / totalMins) * 100).toFixed(1);
+  document.getElementById("game-play-percentage").textContent =
+    `${playPercentage}% of total playtime`;
+  computedData.playPercentagePct = parseFloat(playPercentage);
+
+  // --- Monthly stacked graph (selected year only) ---
+  const wrapper = document.getElementById("month-graph");
+  wrapper.innerHTML = "";
+  const maxTotal = Math.max(
+    ...monthNames.map((m) =>
+      (monthlyGamesColumn[m] || []).reduce((a, b) => a + b.mins, 0)
+    ),
+    1
+  );
+
+  computedData.monthlyStacks = [];
+  monthNames.forEach((month) => {
+    const col = document.createElement("div");
+    col.className = "month-column";
+
+    const stack = document.createElement("div");
+    stack.className = "bar-stack";
+
+    const sortedItems = (monthlyGamesColumn[month] || [])
+      .sort((a, b) => b.mins - a.mins);
+
+    sortedItems.forEach((item) => {
+      const bar = document.createElement("div");
+      bar.className = "game-bar";
+      bar.style.height = (item.mins / maxTotal) * 100 + "%";
+      bar.style.backgroundImage = `url(images/games-512/${item.game}.png)`;
+      bar.style.backgroundSize = "cover";
+      bar.style.backgroundPosition = "center";
+      bar.style.backgroundRepeat = "no-repeat";
+      bar.style.aspectRatio = "16/9";
+
+      const tip = document.createElement("div");
+      tip.className = "tooltip";
+      tip.textContent = `${getFormattedName(item.game)}: ${formatTime(item.mins)}`;
+      bar.appendChild(tip);
+      stack.appendChild(bar);
+    });
+
+    col.appendChild(stack);
+
+    const label = document.createElement("div");
+    label.className = "month-label";
+    label.textContent = month;
+    col.appendChild(label);
+
+    const monthTotalMins = (monthlyGamesColumn[month] || []).reduce(
+      (a, b) => a + b.mins,
+      0
+    );
+    const hoursDiv = document.createElement("div");
+    hoursDiv.className = "month-label";
+    hoursDiv.style.fontSize = "1vw";
+    hoursDiv.style.marginTop = "4px";
+    hoursDiv.textContent = formatHours(monthTotalMins) + " hrs";
+    col.appendChild(hoursDiv);
+
+    wrapper.appendChild(col);
+
+    computedData.monthlyStacks.push({
+      month,
+      totalMins: monthTotalMins,
+      games: sortedItems.map((it) => ({
+        gameId: it.game,
+        name: getFormattedName(it.game),
+        mins: it.mins,
+      })),
+    });
+  });
+
+  function replaceTextTokens(tokenMap) {
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      null,
+      false
+    );
+
+    const nodes = [];
+    let node;
+
+    while ((node = walker.nextNode())) {
+      nodes.push(node);
+    }
+
+    for (const textNode of nodes) {
+      let text = textNode.nodeValue;
+
+      for (const key in tokenMap) {
+        const regex = new RegExp(`\\b${key}\\b`, "g");
+        text = text.replace(regex, tokenMap[key]);
+      }
+
+      textNode.nodeValue = text;
+    }
+  }
+
+  // ---- Raw-log-based session + streak helpers (selected year only) ----
+  const MINUTE_MS = 60 * 1000;
+  const HOUR_MS = 60 * MINUTE_MS;
+  const DAY_MS = 24 * HOUR_MS;
+
+  function parseLogToMs(dateStr, hourStr) {
+    // dateStr is "dd/mm/yyyy", hourStr like "14"
+    const [day, month, yearNum] = dateStr.split("/").map(Number);
+    const hour = parseInt(hourStr, 10);
+    return new Date(yearNum, month - 1, day, hour, 0, 0, 0).getTime();
+  }
+
+  function longestConsecutiveDayStreakFromTimes(timesMs) {
+    if (!timesMs || timesMs.length === 0) return 0;
+    const daySet = new Set(timesMs.map((ms) => Math.floor(ms / DAY_MS)));
+    const days = Array.from(daySet).sort((a, b) => a - b);
+    let maxStreak = 1;
+    let cur = 1;
+    for (let i = 1; i < days.length; i++) {
+      if (days[i] === days[i - 1] + 1) cur++;
+      else {
+        if (cur > maxStreak) maxStreak = cur;
+        cur = 1;
+      }
+    }
+    if (cur > maxStreak) maxStreak = cur;
+    return maxStreak;
+  }
+
+  // Build raw entries for the selected year
+  const rawEntries = [];
+  if (Array.isArray(allGames)) {
+    allGames.forEach((entry) => {
+      const { gameId, logs = [] } = entry || {};
+      (logs || []).forEach((l) => {
+        const [d, h] = String(l).split(",");
+        const [, , logYear] = d.split("/").map(Number);
+        if (logYear !== year) return;
+        const t = parseLogToMs(d, h);
+        rawEntries.push({ gameId, t });
+      });
+    });
+  } else {
+    console.warn("rawEntries: allGames is not an array; defaulting to empty");
+  }
+
+  // Sort once for reuse
+  rawEntries.sort((a, b) => a.t - b.t);
+
+  // Per-game sessions (prev-minute presence rule), selected year only
+  const UNIT_MS = MINUTE_MS;
+
+  // 1) Bucket entries per minute
+  const bucketToEntries = new Map();
+  (rawEntries || []).forEach((e) => {
+    const bucket = Math.floor(e.t / UNIT_MS);
+    if (!bucketToEntries.has(bucket)) bucketToEntries.set(bucket, []);
+    bucketToEntries.get(bucket).push({ gameId: e.gameId, t: e.t });
+  });
+
+  // 2) Iterate buckets and count starts
+  const bucketsSorted = Array.from(bucketToEntries.keys()).sort((a, b) => a - b);
+  const countedStarts = new Set();
+  const perGameSessionsMap = {};
+  const sessionStartLog = [];
+
+  for (const bucket of bucketsSorted) {
+    const currentEntries = bucketToEntries.get(bucket) || [];
+    const prevEntries = bucketToEntries.get(bucket - 1) || [];
+
+    const prevGames = new Set(prevEntries.map((e) => e.gameId));
+    const currentGames = Array.from(new Set(currentEntries.map((e) => e.gameId)));
+
+    for (const gameId of currentGames) {
+      const key = `${gameId}@${bucket}`;
+      if (countedStarts.has(key)) continue;
+
+      const hadPrevSameGame = prevGames.has(gameId);
+
+      if (!hadPrevSameGame) {
+        countedStarts.add(key);
+        perGameSessionsMap[gameId] = (perGameSessionsMap[gameId] || 0) + 1;
+
+        sessionStartLog.push({
+          minuteIso: new Date(bucket * UNIT_MS).toISOString(),
+          gameId,
+          prevMinuteIso: new Date((bucket - 1) * UNIT_MS).toISOString(),
+          prevMinuteGames: Array.from(prevGames).join(", ") || "(none)",
+        });
+      }
+    }
+  }
+
+  // Totals (selected year only)
+  const perGameSessionsTotal = Object.values(perGameSessionsMap).reduce(
+    (a, b) => a + b,
+    0
+  );
+  const topGameSessions = perGameSessionsMap[mostPlayed] || 0;
+  computedData.topGameSessions = topGameSessions;
+  computedData.uniqueSessionsTotal = perGameSessionsTotal;
+
+  // Update “Most Popular Game” session count with accurate value
+  (() => {
+    const el = document.getElementById("game-session-count");
+    if (el) {
+      el.textContent = `${topGameSessions} unique play session${
+        topGameSessions !== 1 ? "s" : ""
+      }`;
+    }
+  })();
+
+  // Longest streak across consecutive days (any game; selected year only)
+  const longestStreak = longestConsecutiveDayStreakFromTimes(
+    rawEntries.map((e) => e.t)
+  );
+  computedData.longestStreakDays = longestStreak;
+
+  // Unique games count for the selected year
+  const uniqueGamesCount = new Set(rawEntries.map((e) => e.gameId)).size;
+  computedData.uniqueGamesCount = uniqueGamesCount;
+
+  // Replace text tokens with selected-year values
+  replaceTextTokens({
+    HOURSVAR: formatHours(totalMinutes),
+    TOPGAMEVAR: getFormattedName(mostPlayed),
+    YEARVAR: year,
+    SCHOOLYEARPERCENTVAR:
+      Math.round(((totalMinutes / 57000) * 100) * 100) / 100,
+    UNIQUESESSIONSVAR: perGameSessionsTotal,
+    LONGESTSTREAKVAR: longestStreak,
+    GAMESNUMBERVAR: uniqueGamesCount,
+  });
+
+  // Console summaries
+  console.groupCollapsed(
+    "[sessions:start-log] New session starts (prev-minute presence rule)"
+  );
+  console.table(sessionStartLog);
+  console.groupEnd();
+
+  console.groupCollapsed("[sessions:summary]");
+  console.log("perGameSessionsMap:", perGameSessionsMap);
+  console.log(
+    "perGameSessionsTotal (UNIQUESESSIONSVAR):",
+    perGameSessionsTotal
+  );
+  console.log("topGameSessions (mostPlayed):", topGameSessions);
+  console.log("uniqueGamesCount (GAMESNUMBERVAR):", uniqueGamesCount);
+  console.groupEnd();
+});
+</script>
+</body>
+</html>

@@ -500,11 +500,9 @@
         this website is so cool
         <br><br>
         Last Update:
-        <a href="/changelog.html">02/11/2025</a>
+        <a href="/changelog.html">02/12/2025</a>
         <br>
-        It is not halloween anymore
-        <br>
-        5 New Games!<br>
+        <a href="/wrapped.html">CoolUBG Wrapped</a><br>(keeps updating until end of the year)
       </p>
     </div>
 
@@ -542,48 +540,69 @@
             transform: translate(-50%, -50%);
           }
         </style>
+<script>
+  const checkbox = document.getElementById("toggleCheckbox");
+  const KEY = "playtime-log";
+  const SCHEMA = "schema:v2";
+  const MIGRATION_TAG = "migrated:2025-12-02";
 
-        <script>
-          const checkbox = document.getElementById("toggleCheckbox");
+  function parse(raw) {
+    const tokens = (raw || "").split(/\s+/).filter(Boolean);
+    const state = tokens.includes("playtime-show")
+      ? "show"
+      : tokens.includes("playtime-hide")
+      ? "hide"
+      : null;
+    const changedTok = tokens.find(t => t.startsWith("changed:"));
+    const changed = changedTok ? changedTok.split(":")[1] === "yes" : null;
+    const hasSchema = tokens.includes(SCHEMA);
+    return { tokens, state, changed, hasSchema };
+  }
 
-          // Function to update the playtime-log based on the checkbox state
-          function updatePlaytimeLog() {
-            let playtimeLog = localStorage.getItem("playtime-log") || "";
+  function write(state, changed) {
+    const parts = [
+      state === "show" ? "playtime-show" : "playtime-hide",
+      `changed:${changed ? "yes" : "no"}`,
+      SCHEMA,
+      MIGRATION_TAG
+    ];
+    localStorage.setItem(KEY, parts.join(" "));
+  }
 
-            if (checkbox.checked) {
-              playtimeLog = playtimeLog.replace(/playtime-hide/, "playtime-show");
-              if (!playtimeLog.includes("playtime-show")) {
-                playtimeLog = `playtime-show ${playtimeLog}`.trim();
-              }
-            } else {
-              playtimeLog = playtimeLog.replace(/playtime-show/, "playtime-hide");
-              if (!playtimeLog.includes("playtime-hide")) {
-                playtimeLog = `playtime-hide ${playtimeLog}`.trim();
-              }
-            }
+  function forceMigrateIfNeeded() {
+    const { hasSchema } = parse(localStorage.getItem(KEY));
+    if (!hasSchema) {
+      // Force everyone to new format: show by default, not user-changed
+      write("show", false);
+    }
+  }
 
-            localStorage.setItem("playtime-log", playtimeLog);
-          }
+  function syncUIFromStorage() {
+    const { state } = parse(localStorage.getItem(KEY));
+    checkbox.checked = state !== "hide"; // default to true
+  }
 
+  function onToggle() {
+    const prev = parse(localStorage.getItem(KEY));
+    const newState = checkbox.checked ? "show" : "hide";
+    // Once changed is true, keep it true. Otherwise, mark true only if a real state change occurred.
+    const nowChanged =
+      prev.changed === true ? true : (prev.state && prev.state !== newState) ? true : false;
+    write(newState, nowChanged);
+  }
 
-          // Set the checkbox state based on playtime-log on page load
-          window.addEventListener("DOMContentLoaded", () => {
-            let playtimeLog = localStorage.getItem("playtime-log") || "";
+  window.addEventListener("DOMContentLoaded", () => {
+    forceMigrateIfNeeded();
+    syncUIFromStorage();
+  });
 
-            // If the log is empty, initialize with "playtime-hide" at the top
-            if (playtimeLog === "") {
-              playtimeLog = "playtime-hide"; // Initialize with "playtime-hide"
-              localStorage.setItem("playtime-log", playtimeLog);
-            }
+  checkbox.addEventListener("change", onToggle);
 
-            // Set the checkbox state based on playtime-log
-            checkbox.checked = playtimeLog.includes("playtime-show");
-          });
-
-          // Listen for changes to the checkbox
-          checkbox.addEventListener("change", updatePlaytimeLog);
-
-        </script>
+  // Optional: keep in sync across tabs/windows
+  window.addEventListener("storage", (e) => {
+    if (e.key === KEY) syncUIFromStorage();
+  });
+</script>
         <br>
         <a href="https://forms.gle/gvpTfVKfNj2YwRzG6">Suggest a Game!</a>
         <br>
